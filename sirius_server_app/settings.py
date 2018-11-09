@@ -77,7 +77,7 @@ WSGI_APPLICATION = 'sirius_server_app.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'django_db',
+        'NAME': 'sirius_psql',
         'USER': 'kokokotlin',
         'PASSWORD': 'password',
         'HOST': '127.0.0.1',
