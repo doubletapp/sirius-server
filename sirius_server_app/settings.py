@@ -25,7 +25,9 @@ SECRET_KEY = '9g(^vw1x62#0%04og-jr+f11*hl14(!)$qu_#jl4!@_f5lrd&z'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    'sirius.doubletapp.ru'
+]
 
 
 # Application definition
