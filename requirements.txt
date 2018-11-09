@@ -1,2 +1,3 @@
-Django
-psycopg2
+Django==2.1.3
+psycopg2==2.7.6
+djangorestframework==3.9.0
