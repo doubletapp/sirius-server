@@ -1,10 +1,44 @@
 # -*- coding: utf-8 -*-
-import uuid as uuid
+import uuid
+from django.db.models import (
+    CharField, IntegerField, TextField, ForeignKey, Model, CASCADE, DateTimeField,
+    BooleanField, UUIDField, AutoField, ImageField, OneToOneField, FloatField
+)
+from django.contrib.auth.models import User as DjangoUser
 from django.db import models
+from django.contrib.gis.db.models import PointField
+
+
+class AdminUser(Model):
+    user = OneToOneField(DjangoUser, on_delete=CASCADE, primary_key=True)
+    vk_id = CharField(max_length=100)
+    vk_token = CharField(max_length=400)
+
+    def __str__(self):
+        return str(self.vk_id)
+
+
+class VKUser(Model):
+    vk_id = CharField(max_length=100, primary_key=True, unique=True)
+    vk_token = CharField(max_length=400)
+    phone = CharField(max_length=50, blank=True)
+    is_phone_confirmed = BooleanField(default=False)
+    email = TextField(blank=True)
+    is_email_confirmed = BooleanField(default=False)
+    auth_token = UUIDField(default=uuid.uuid4, editable=True)
+    create_datetime = DateTimeField(auto_now_add=True)
+
+    city = CharField(max_length=400, null=True, blank=True, default=None)
+    point = PointField(null=True, blank=True, default=None)
+
+    def __str__(self):
+        return str(self.vk_id)
 
 
 class User(models.Model):
-    access_token = models.CharField(max_length=200)
+    access_token = models.CharField(max_length=200, null=True)
+    login = models.CharField(max_length=200, null=True)
+    password = models.CharField(max_length=200, null=True)
     uuid = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
 
     def __str__(self):
