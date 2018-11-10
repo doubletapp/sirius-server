@@ -24,7 +24,7 @@ class APIVKUser(AnonymousUser):
         return False
 
 
-class SiriusUser(APIUser):
+class SiriusUser(APIVKUser):
     pass
 
 
@@ -37,12 +37,12 @@ class DefaultBasicAuthentication(BasicAuthentication):
             vk_user = VKUser.objects.get(vk_id=userid, auth_token=password)
             return (APIVKUser(vk_user), None)
 
-        except (VKUser.DoesNotExist, ValidationError):
+        except (VKUser.DoesNotExist, ValidationError, ValueError):
             try:
-                sirius_user = VKUser.objects.get(sirius_id=userid, auth_token=password)
+                sirius_user = VKUser.objects.get(sirius_id=int(userid), auth_token=password)
                 return (SiriusUser(sirius_user), None)
 
-            except (VKUser.DoesNotExist, ValidationError):
+            except (VKUser.DoesNotExist, ValidationError, ValueError):
                 pass
             if not default_login or (userid, password) != (default_login, default_password):
                 raise PermissionDenied
