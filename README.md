@@ -25,6 +25,7 @@ sudo service nginx restart
 
 sudo cp config/gunicorn.service /etc/systemd/system/gunicorn.service
 sudo cp config/gunicorn.conf /etc/init/gunicorn.conf
+cp local_settings_example.py local_settings.py
 ```
 
 # миграции и статитка
