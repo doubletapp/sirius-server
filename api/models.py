@@ -22,7 +22,7 @@ class VKUser(Model):
     vk_id = CharField(max_length=100, primary_key=True, unique=True)
     vk_token = CharField(max_length=400)
     sirius_id = IntegerField(blank=True, null=True)
-    sirius_password = IntegerField(blank=True, null=True)
+    sirius_password = CharField(max_length=100, blank=True, null=True)
     auth_token = UUIDField(default=uuid.uuid4, editable=True)
     create_datetime = DateTimeField(auto_now_add=True)
 

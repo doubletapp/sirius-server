@@ -25,6 +25,5 @@ class VKUserSerializer(HyperlinkedModelSerializer):
         model = VKUser
 
         fields = (
-            'vk_id', 'vk_token', 'auth_token', 'phone', 'is_phone_confirmed',
-            'email', 'is_email_confirmed', 'point', "city"
+            'vk_id', 'vk_token', 'sirius_id', 'sirius_password', 'auth_token', 'city'
         )
