@@ -34,7 +34,7 @@ class DefaultBasicAuthentication(BasicAuthentication):
         default_password = DEFAULT_AUTHENTICATION_CREDENTIAL.get("password")
 
         try:
-            vk_user = VKUser.objects.get(vk_id=userid, auth_token=password)
+            vk_user = VKUser.objects.get(vk_id=int(userid), auth_token=password)
             return (APIVKUser(vk_user), None)
 
         except (VKUser.DoesNotExist, ValidationError, ValueError):

@@ -19,7 +19,7 @@ class AdminUser(Model):
 
 
 class VKUser(Model):
-    vk_id = CharField(max_length=100, null=True)
+    vk_id = IntegerField(null=True)
     vk_token = CharField(max_length=400, null=True)
     sirius_id = IntegerField(blank=True, null=True)
     sirius_password = CharField(max_length=100, blank=True, null=True)
