@@ -1,4 +1,5 @@
 from django.contrib.auth.models import AnonymousUser
+from django.core.exceptions import ValidationError
 from rest_framework.authentication import BasicAuthentication
 from rest_framework.exceptions import PermissionDenied
 
@@ -23,6 +24,10 @@ class APIVKUser(AnonymousUser):
         return False
 
 
+class SiriusUser(APIUser):
+    pass
+
+
 class DefaultBasicAuthentication(BasicAuthentication):
     def authenticate_credentials(self, userid, password, request=None):
         default_login = DEFAULT_AUTHENTICATION_CREDENTIAL.get("login")
@@ -32,7 +37,13 @@ class DefaultBasicAuthentication(BasicAuthentication):
             vk_user = VKUser.objects.get(vk_id=userid, auth_token=password)
             return (APIVKUser(vk_user), None)
 
-        except VKUser.DoesNotExist:
+        except (VKUser.DoesNotExist, ValidationError):
+            try:
+                sirius_user = VKUser.objects.get(sirius_id=userid, auth_token=password)
+                return (SiriusUser(sirius_user), None)
+
+            except (VKUser.DoesNotExist, ValidationError):
+                pass
             if not default_login or (userid, password) != (default_login, default_password):
                 raise PermissionDenied
 

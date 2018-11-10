@@ -1,32 +1,25 @@
+import json
+
 from django.shortcuts import render
 
 # Create your views here.
 from rest_framework.viewsets import ModelViewSet
 from rest_framework import status
 from rest_framework.response import Response
-from django.contrib.gis.geos import Point
 
-from api.models import VKUser
-from api.serializers import VKUserSerializer
+from api.models import VKUser, Course
+from api.serializers import VKUserSerializer, CourseSerializer
 
 
 class CustomModelViewSet(ModelViewSet):
-    def create(self, request, *args, **kwargs):
+    def create(self, request, data, *args, **kwargs):
 
         # Если существует вк-юзер - его нужно прописать как владельца
         vk_user = getattr(request.user, "vk_user", None)
         if vk_user:
             request.data.update({"author": vk_user.vk_id})
 
-        # Если существует точка - её нужно преобразовать в исходные тип данных
-        if request.data.get("point"):
-            point = Point(
-                request.data["point"][0],
-                request.data["point"][1]
-            )
-            request.data.update({"point": point})
-
-        serializer = self.get_serializer(data=request.data)
+        serializer = self.get_serializer(data=data)
         serializer.is_valid(raise_exception=True)
         self.perform_create(serializer)
         instns = serializer.save()
@@ -40,18 +33,28 @@ class VKUserViewSet(CustomModelViewSet):
 
     def create(self, request, *args, **kwargs):
 
-        try:
-            vk_user = VKUser.objects.get(
-                vk_id=request.data.get("vk_id")
-            )
+        data = request.data
+        vk_id = data.get("vk_id")
+        if not vk_id:
+            data = json.loads(list(request.data.keys())[0])
 
+        try:
+
+            vk_user = VKUser.objects.get(
+                vk_id=data.get("vk_id")
+            )
             if getattr(request.user, "vk_user", None):
-                request.data["vk_token"] = vk_user.vk_token
+                data["vk_token"] = vk_user.vk_token
 
             self.get_object = lambda: vk_user
             return super(VKUserViewSet, self).update(request, *args, **kwargs)
 
         except VKUser.DoesNotExist:
-            instns, response = super(VKUserViewSet, self).create(request, *args, **kwargs)
+            instns, response = super(VKUserViewSet, self).create(request, data, *args, **kwargs)
 
             return response
+
+
+class CourseViewSet(ModelViewSet):
+    queryset = Course.objects.all()
+    serializer_class = CourseSerializer

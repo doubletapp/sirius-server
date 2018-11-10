@@ -3,7 +3,7 @@ from rest_framework.serializers import (
     HyperlinkedModelSerializer, ModelSerializer, SerializerMethodField
 )
 
-from api.models import AdminUser, VKUser
+from api.models import AdminUser, VKUser, Course
 
 
 class AdminUserSerializer():
@@ -27,3 +27,9 @@ class VKUserSerializer(HyperlinkedModelSerializer):
         fields = (
             'vk_id', 'vk_token', 'sirius_id', 'sirius_password', 'auth_token', 'city'
         )
+
+
+class CourseSerializer(ModelSerializer):
+    class Meta:
+        model = Course
+        fields = ('id', 'title')

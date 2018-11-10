@@ -82,7 +82,7 @@ WSGI_APPLICATION = 'sirius_server_app.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.contrib.gis.db.backends.postgis',
-        'NAME': 'sirius_psql',
+        'NAME': 'sirius_psql2',
         'USER': 'kokokotlin',
         'PASSWORD': DB_PASSWORD,
         'HOST': '127.0.0.1',
