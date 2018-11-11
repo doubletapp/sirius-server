@@ -2,11 +2,14 @@
 
 
 ```
-CREATE USER kokokotlin WITH password 'PWD';
-CREATE DATABASE sirius_psql2 OWNER kokokotlin;
-\c sirius_psql2;
+UPDATE pg_database SET datistemplate = FALSE WHERE datname = 'template1';
+DROP DATABASE Template1;
+CREATE DATABASE sirius_psql3 OWNER kokokotlin ENCODING = 'UTF-8' lc_collate = 'en_US.utf8' lc_ctype = 'en_US.utf8' template template0;
+\c sirius_psql3;
 CREATE EXTENSION postgis;
-GRANT ALL privileges ON DATABASE sirius_psql2 TO kokokotlin;
+CREATE USER kokokotlin WITH password 'PWD';
+GRANT ALL privileges ON DATABASE sirius_psql3 TO kokokotlin;
+SET client_encoding = 'UTF8';
 ```
 
 # зависимости
