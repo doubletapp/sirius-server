@@ -11,7 +11,7 @@ def read_rows():
     with open(os.path.join(os.path.dirname(__file__), 'data/sirius_recomendations.txt'), encoding='utf-8') as csvfile:
         # csv_reader = csv.reader(csvfile)
         for row in csvfile:
-            yield row.rsplit('\n')
+            yield row.rsplit('\n')[0]
 
 
 def fill(apps, schema_editor):
