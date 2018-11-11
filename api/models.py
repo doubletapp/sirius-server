@@ -99,8 +99,13 @@ class VKUser(Model):
     # educational_feed = ArrayField(ForeignKey(Course, on_delete=True, null=True), size=100)
 
     def save(self, force_insert=False, force_update=False, using=None, update_fields=None):
+
+        super(VKUser, self).save(
+            force_insert=False, force_update=False, using=None, update_fields=None
+        )
         for tr in self.get_user_recomendations():
             self.educational_trajectory.add(tr)
+
         super(VKUser, self).save(
             force_insert=False, force_update=False, using=None, update_fields=None
         )
