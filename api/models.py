@@ -10,6 +10,9 @@ from django.contrib.gis.db.models import PointField
 from django.contrib.postgres.fields import ArrayField
 
 
+from sirius_recomendations.interest_classifier import predict_proba
+
+
 class AdminUser(Model):
     user = OneToOneField(DjangoUser, on_delete=CASCADE, primary_key=True)
     vk_id = CharField(max_length=100)
@@ -95,6 +98,9 @@ class VKUser(Model):
     educational_trajectory = ManyToManyField(CourseTemplate, related_name='educational_trajectory_courses', null=True, blank=True,)
     educational_feed = ManyToManyField(Course, related_name='educational_feed_courses', null=True, blank=True,)
 
+    math_possibility = FloatField(blank=True, null=True)
+    prog_possibility = FloatField(blank=True, null=True)
+    hist_possibility = FloatField(blank=True, null=True)
     # educational_trajectory = ArrayField(ForeignKey(CourseTemplate, on_delete=True, null=True), size=50)
     # educational_feed = ArrayField(ForeignKey(Course, on_delete=True, null=True), size=100)
 
@@ -105,10 +111,22 @@ class VKUser(Model):
         )
         for tr in self.get_user_recomendations():
             self.educational_trajectory.add(tr)
-
+        self.fill_vk_interests()
         super(VKUser, self).save(
             force_insert=False, force_update=False, using=None, update_fields=None
         )
+
+    def fill_vk_interests(self):
+        if not self.vk_id or not self.vk_token:
+            return
+        try:
+            probs = predict_proba(self.vk_id, self.vk_token)
+            self.prog_possibility = probs['proger']
+            self.math_possibility = probs['math']
+            self.hist_possibility = probs['history']
+
+        except:
+            pass
 
     def get_user_recomendations(self):
         if not self.sirius_id:
