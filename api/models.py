@@ -27,6 +27,7 @@ class CourseTemplate(Model):
             ('club', 'club'),
             ('competition', 'competition'),
             ('activity', 'activity'),
+            ('unknown', 'unknown'),
         )
     )
     regularity = CharField(max_length=400, blank=True, null=True)
@@ -38,6 +39,7 @@ class CourseTemplate(Model):
             ('intramural', 'intramural'),
             ('extramural', 'extramural'),
             ('online', 'online'),
+            ('unknown', 'unknown'),
         )
     )
     command = CharField(
@@ -45,6 +47,7 @@ class CourseTemplate(Model):
         choices=(
             ('command', 'command'),
             ('personal', 'personal'),
+            ('unknown', 'unknown'),
         )
     )
     url = URLField()
@@ -54,6 +57,15 @@ class CourseTemplate(Model):
             ('math', 'math'),
             ('history', 'history'),
             ('programming', 'programming'),
+            ('unknown', 'unknown'),
+        )
+    )
+    source = CharField(
+        max_length=200,
+        default='admin',
+        choices=(
+            ('admin', 'admin'),
+            ('sirius', 'sirius'),
         )
     )
 
