@@ -26,7 +26,7 @@ SECRET_KEY = '9g(^vw1x62#0%04og-jr+f11*hl14(!)$qu_#jl4!@_f5lrd&z'
 DEBUG = True
 
 ALLOWED_HOSTS = [
-    'sirius.doubletapp.ru'
+    'sirius.doubletapp.ru', '127.0.0.1'
 ]
 
 

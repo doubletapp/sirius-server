@@ -1,3 +1,19 @@
-from django.contrib import admin
+from django.contrib.admin import site, ModelAdmin
+from api.models import VKUser, AdminUser, Course, CourseTemplate
 
-# Register your models here.
+
+class VKUserAdmin(ModelAdmin):
+    pass
+
+
+class CourseAdmin(ModelAdmin):
+    pass
+
+
+class CourseTemplateAdmin(ModelAdmin):
+    pass
+
+
+site.register(VKUser, VKUserAdmin)
+site.register(Course, CourseAdmin)
+site.register(CourseTemplate, CourseTemplateAdmin)

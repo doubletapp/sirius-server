@@ -1,11 +1,11 @@
-# -*- coding: utf-8 -*-
 import uuid
+
+from django.utils import timezone
 from django.db.models import (
     CharField, IntegerField, TextField, ForeignKey, Model, CASCADE, DateTimeField,
-    BooleanField, UUIDField, AutoField, ImageField, OneToOneField, FloatField
+    BooleanField, UUIDField, AutoField, ImageField, OneToOneField, FloatField, URLField
 )
 from django.contrib.auth.models import User as DjangoUser
-from django.db import models
 from django.contrib.gis.db.models import PointField
 
 
@@ -32,11 +32,54 @@ class VKUser(Model):
         return str(self.vk_id)
 
 
-class Course(models.Model):
-    title = models.CharField(max_length=200)
+class CourseTemplate(Model):
+    title = CharField(max_length=400)
+    course_type = CharField(
+        max_length=200,
+        choices=(
+            ('club', 'club'),
+            ('competition', 'competition'),
+            ('activity', 'activity'),
+        )
+    )
+    regularity = CharField(max_length=400, blank=True, null=True)
+    class_start = IntegerField(default=5)
+    class_end = IntegerField(default=11)
+    intramuraled = CharField(
+        max_length=200,
+        choices=(
+            ('intramural', 'intramural'),
+            ('extramural', 'extramural'),
+            ('online', 'online'),
+        )
+    )
+    command = CharField(
+        max_length=200,
+        choices=(
+            ('command', 'command'),
+            ('personal', 'personal'),
+        )
+    )
+    url = URLField()
+    specialization = CharField(
+        max_length=200,
+        choices=(
+            ('math', 'math'),
+            ('history', 'history'),
+            ('programming', 'programming'),
+        )
+    )
 
     def __str__(self):
         return self.title
+
+
+class Course(Model):
+    course_template = ForeignKey(CourseTemplate, on_delete=True, null=True)
+    date = DateTimeField(default=timezone.now)
+
+    def __str__(self):
+        return self.course_template.title + " " + self.date.strftime("%d-%m-%Y")
 
 
 REGIONS = ('Адыгея Респ', 'Алтай Респ', 'Алтайский край', 'Амурская обл', 'Архангельская обл', 'Астраханская обл', 'Башкортостан Респ', 'Белгородская обл', 'Брянская обл', 'Бурятия Респ', 'Владимирская обл', 'Волгоградская обл', 'Вологодская обл', 'Воронежская обл', 'Дагестан Респ', 'Еврейская Аобл', 'Забайкальский край', 'Ивановская обл', 'Ингушетия Респ', 'Иркутская обл', 'Кабардино-Балкарская Респ', 'Калининградская обл', 'Калмыкия Респ', 'Калужская обл', 'Камчатский край', 'Карачаево-Черкесская Респ', 'Карелия Респ', 'Кемеровская обл', 'Кировская обл', 'Коми Респ', 'Костромская обл', 'Краснодарский край', 'Красноярский край', 'Курганская обл', 'Курская обл', 'Ленинградская обл', 'Липецкая обл', 'Магаданская обл', 'Марий Эл Респ', 'Мордовия Респ', 'Москва г', 'Московская обл', 'Мурманская обл', 'Ненецкий АО', 'Нижегородская обл', 'Новгородская обл', 'Новосибирская обл', 'Омская обл', 'Оренбургская обл', 'Орловская обл', 'Пензенская обл', 'Пермский край', 'Приморский край', 'Псковская обл', 'Ростовская обл', 'Рязанская обл', 'Самарская обл', 'Санкт-Петербург г', 'Саратовская обл', 'Саха /Якутия/ Респ', 'Сахалинская обл', 'Свердловская обл', 'Северная Осетия - Алания Респ', 'Смоленская обл', 'Ставропольский край', 'Тамбовская обл', 'Татарстан Респ', 'Тверская обл', 'Томская обл', 'Тульская обл', 'Тыва Респ', 'Тюменская обл', 'Удмуртская Респ', 'Ульяновская обл', 'Хабаровский край', 'Хакасия Респ', 'Ханты-Мансийский Автономный округ - Югра АО', 'Челябинская обл', 'Чеченская Респ', 'Чувашская Респ', 'Чукотский АО', 'Ямало-Ненецкий АО', 'Ярославская обл')

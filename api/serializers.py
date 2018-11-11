@@ -32,4 +32,4 @@ class VKUserSerializer(HyperlinkedModelSerializer):
 class CourseSerializer(ModelSerializer):
     class Meta:
         model = Course
-        fields = ('id', 'title')
+        fields = ('id', 'course_template', 'date')
