@@ -35,7 +35,8 @@ class VKUserViewSet(CustomModelViewSet):
 
         data = request.data
         vk_id = data.get("vk_id")
-        if not vk_id:
+        sirius_id = data.get("sirius_id")
+        if not vk_id and not sirius_id:
             data = json.loads(list(request.data.keys())[0])
 
         try:
@@ -50,6 +51,19 @@ class VKUserViewSet(CustomModelViewSet):
             return super(VKUserViewSet, self).update(request, *args, **kwargs)
 
         except VKUser.DoesNotExist:
+            try:
+                vk_user = VKUser.objects.get(
+                    sirius_id=data.get("sirius_id"),
+                    sirius_password=data.get("sirius_password"),
+                )
+                if getattr(request.user, "vk_user", None):
+                    data["vk_token"] = vk_user.vk_token
+
+                self.get_object = lambda: vk_user
+                return super(VKUserViewSet, self).update(request, *args, **kwargs)
+            except VKUser.DoesNotExist:
+                pass
+
             instns, response = super(VKUserViewSet, self).create(request, data, *args, **kwargs)
 
             return response
