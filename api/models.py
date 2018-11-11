@@ -98,6 +98,35 @@ class VKUser(Model):
     # educational_trajectory = ArrayField(ForeignKey(CourseTemplate, on_delete=True, null=True), size=50)
     # educational_feed = ArrayField(ForeignKey(Course, on_delete=True, null=True), size=100)
 
+    def save(self, force_insert=False, force_update=False, using=None, update_fields=None):
+        for tr in self.get_user_recomendations():
+            self.educational_trajectory.add(tr)
+        super(VKUser, self).save(
+            force_insert=False, force_update=False, using=None, update_fields=None
+        )
+
+    def get_user_recomendations(self):
+        if not self.sirius_id:
+            return
+        import os
+        import subprocess
+        import json
+        dir_path = os.path.dirname(__file__)
+        try:
+            r = subprocess.Popen(
+                "python2 %s %s %s" % (
+                    os.path.join(dir_path, '..', 'sirius_recomendations', 'recomendator.py'), self.sirius_id, '[]'
+                ),
+                shell=True, stdout=subprocess.PIPE).stdout.read()
+
+            for title in json.loads(r.decode('utf-8')):
+                try:
+                    yield CourseTemplate.objects.get(title=title[:200])
+                except:
+                    pass
+        except:
+            return
+
     def __str__(self):
         return str(self.vk_id)
 
