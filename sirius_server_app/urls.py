@@ -2,12 +2,13 @@ from django.conf.urls import url, include
 from rest_framework import routers
 from django.contrib import admin
 
-from api.views import VKUserViewSet, CourseViewSet
+from api.views import VKUserViewSet, CourseViewSet, QuestionViewSet
 from sirius_recomendations.views import recommend_achievements
 
 router = routers.DefaultRouter()
 router.register(r'auth', VKUserViewSet)
 router.register(r'course', CourseViewSet)
+router.register(r'educational_trajectory', QuestionViewSet)
 
 urlpatterns = [
     url(r'^', include(router.urls)),

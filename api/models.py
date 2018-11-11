@@ -78,13 +78,13 @@ class VKUser(Model):
     create_datetime = DateTimeField(auto_now_add=True)
 
     city = CharField(max_length=400, null=True, blank=True, default=None)
+    current_class = IntegerField(default=5)
 
     educational_trajectory = ManyToManyField(CourseTemplate, related_name='educational_trajectory_courses', null=True, blank=True,)
     educational_feed = ManyToManyField(Course, related_name='educational_feed_courses', null=True, blank=True,)
 
     # educational_trajectory = ArrayField(ForeignKey(CourseTemplate, on_delete=True, null=True), size=50)
     # educational_feed = ArrayField(ForeignKey(Course, on_delete=True, null=True), size=100)
-
 
     def __str__(self):
         return str(self.vk_id)

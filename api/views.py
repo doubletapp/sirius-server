@@ -8,7 +8,7 @@ from rest_framework import status
 from rest_framework.response import Response
 
 from api.models import VKUser, Course
-from api.serializers import VKUserSerializer, CourseSerializer
+from api.serializers import VKUserSerializer, CourseSerializer, QuestionSerializer
 
 
 class CustomModelViewSet(ModelViewSet):
@@ -58,3 +58,8 @@ class VKUserViewSet(CustomModelViewSet):
 class CourseViewSet(ModelViewSet):
     queryset = Course.objects.all()
     serializer_class = CourseSerializer
+
+
+class QuestionViewSet(ModelViewSet):
+    queryset = VKUser.objects.all()
+    serializer_class = QuestionSerializer
