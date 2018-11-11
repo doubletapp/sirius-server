@@ -11,7 +11,7 @@ class CourseAdmin(ModelAdmin):
 
 
 class CourseTemplateAdmin(ModelAdmin):
-    pass
+    list_filter = ('source',)
 
 
 site.register(VKUser, VKUserAdmin)
