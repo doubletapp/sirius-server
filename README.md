@@ -2,11 +2,11 @@
 
 
 ```
-CREATE DATABASE sirius_psql OWNER kokokotlin;
-\c sirius_psql;
-CREATE EXTENSION postgis;
 CREATE USER kokokotlin WITH password 'PWD';
-GRANT ALL privileges ON DATABASE sirius_psql TO kokokotlin;
+CREATE DATABASE sirius_psql2 OWNER kokokotlin;
+\c sirius_psql2;
+CREATE EXTENSION postgis;
+GRANT ALL privileges ON DATABASE sirius_psql2 TO kokokotlin;
 ```
 
 # зависимости
